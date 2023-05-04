@@ -120,6 +120,10 @@ languageSwitcher.addEventListener('click', (event) => {
       event.target.classList.add('active');
     }
   });
+ let favourite = document.querySelector('.favourite')
+  allRedIconThree.onclick = () => {
+    favourite.style.right = '0%'
+  }
 
   
   let allRedIcons = [allRedIconOne, allRedIconTwo, allRedIconThree, allRedIconFour];
@@ -139,51 +143,111 @@ btnBurger.onclick = () => {
   center.classList.add('mt')
 }
 
-let prodCont = document.querySelector('.product-container')
+
 
 let icons = ['price', 'rate', 'count']
+let showBtnFive = document.querySelector('#btn-show-5')
+let showBtnAll = document.querySelector('#btn-show-all')
 
-for(let item of arr) {
-  let  item_div =   document.createElement('div')
-  let img_content = document.createElement('img')
-  let decr_div = document.createElement('div')
-  let h3 = document.createElement('h3')
-  let p = document.createElement('p')
-  let row = document.createElement('div')
-  let btn = document.createElement('button')
 
-  for(let icon of icons) {
-    let feature = document.createElement('div')
-    let img = document.createElement('img')
-    let span = document.createElement('span')
 
-    feature.classList.add('feature')
 
-  img.src = './public/icons/' + icon + '.svg'
-  span.innerHTML = item[icon] !== undefined ? item[icon]  : item.rating[icon]
+showBtnFive.addEventListener('click', () => {
+  showProducts(5);
+});
 
-  feature.append(img, span)
-  row.append(feature)
-  img.onclick = () => {
-    img.classList.add('svg')
+showBtnAll.addEventListener('click', () => {
+  showProducts(arr.length);
+});
+
+
+
+function showProducts(count) {
+  const productsContainer = document.querySelector('.product-container');
+  let item;
+  let pCounter = document.querySelector('#cart_amount')
+
+
+  for (let i = 0; i < count; i++) {
+    
+    item = arr[i];
+    
+
+    const itemDiv = document.createElement('div');
+    const imgContent = document.createElement('img');
+    const decrDiv = document.createElement('div');
+    const h3 = document.createElement('h3');
+    const p = document.createElement('p');
+    const row = document.createElement('div');
+    const btn = document.createElement('button');
+
+    for (let icon of icons) {
+      const feature = document.createElement('div');
+      const img = document.createElement('img');
+      const span = document.createElement('span');
+
+      feature.classList.add('feature');
+
+      img.src = './public/icons/' + icon + '.svg';
+      span.innerHTML = item[icon] !== undefined ? item[icon] : item.rating[icon];
+
+      feature.append(img, span);
+      row.append(feature);
+      img.onclick = () => {
+        img.classList.add('svg');
+      };
+    }
+
+    itemDiv.classList.add('item');
+    imgContent.classList.add('content');
+    decrDiv.classList.add('description');
+    row.classList.add('row');
+
+    h3.innerHTML = item.category;
+    p.innerHTML = item.description.slice(0, 100).toLowerCase();
+    btn.innerHTML = 'В избранное';
+
+    imgContent.src = item.image;
+
+    itemDiv.append(imgContent, decrDiv);
+    decrDiv.append(h3, p, row, btn);
+    productsContainer.append(itemDiv);
+
+    let countTwo = 0
+
+btn.onclick = () => {
+  if (btn.innerHTML == 'Добавлено') {
+    btn.innerHTML = 'В избранное';
+    btn.classList.remove('add-btn');
+    countTwo--;
+  } else {
+    btn.innerHTML = 'Добавлено';
+    btn.classList.add('add-btn');
+    countTwo++;
   }
+  pCounter.innerHTML = countTwo;
+};
+    if (i == arr.length) {
+      break;
+    }
   }
-
   
-
-  item_div.classList.add('item')
-  img_content.classList.add('content')
-  decr_div.classList.add('description')
-  row.classList.add('row')
-
-  h3.innerHTML = item.category
-  p.innerHTML = item.description.slice(0, 100).toLowerCase()
-  btn.innerHTML = 'В избранное'
-
-  img_content.src = item.image
-
-  item_div.append(img_content, decr_div)
-  decr_div.append(h3, p, row, btn)
-  prodCont.append(item_div)
 }
 
+
+
+let imgClose = document.querySelectorAll('.close-icon')
+let click = false
+
+imgClose.forEach(close =>  {
+  close.onclick = () => {
+    if(click == false) {
+      center.classList.remove('mt')
+      favourite.style.right = '-100%'
+      click = true
+    } else {
+      click = false
+    }
+  }
+})
+  
